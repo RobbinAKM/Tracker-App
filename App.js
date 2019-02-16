@@ -1,21 +1,54 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import AccountScreen from './src/screens/AccountScreen';
+import SigninScreen from './src/screens/SigninScreen';
+import SignupScreen from './src/screens/SignupScreen';
+import TrackCreateScreen from './src/screens/TrackCreateScreen';
+import TrackDetailScreen from './src/screens/TrackDetailScreen';
+import TrackListScreen from './src/screens/TrackListScreen';
+import SplashScreen from './src/screens/SplashScreen';
+import {Provider as AuthProvider} from './src/context/AuthContext';
+import {Provider as LocationProvider} from './src/context/LocationContext';
+import {Provider as TrackProvider} from './src/context/TrackContext';
+import {setNavigation} from './src/navigationRef';
+import { FontAwesome } from '@expo/vector-icons';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+
+const TrackListFlow =createStackNavigator({
+  TrackList:TrackListScreen ,
+  TrackDetail:TrackDetailScreen
+});
+
+TrackListFlow.navigationOptions={
+  title:'Track List',
+  tabBarIcon:<FontAwesome name="th-list" size={20} color="black" />
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const switchNavigator =createSwitchNavigator({
+  SplashScreen:SplashScreen,
+  authFlow:createStackNavigator({
+    Signup:SignupScreen,
+    Signin:SigninScreen
+  }),
+  trackFlow:createBottomTabNavigator({
+    TrackListFlow,
+    TrackCreate:TrackCreateScreen ,
+    Account:AccountScreen
+  }),
 });
+
+const App = createAppContainer(switchNavigator);
+export default ()=>{
+  return(
+<TrackProvider>
+  <LocationProvider>
+     <AuthProvider>
+      <App ref={navigator=>{setNavigation(navigator)}}/>
+     </AuthProvider>
+  </LocationProvider>
+</TrackProvider>
+  )
+}
