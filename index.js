@@ -15,7 +15,7 @@ app.use(trackRoute);
 
 
 
-var mongoURL="mongodb://robbin:mkItqFZqsQN5pcWj@cluster0-shard-00-00.qpmln.mongodb.net:27017,cluster0-shard-00-01.qpmln.mongodb.net:27017,cluster0-shard-00-02.qpmln.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-qqfv6a-shard-0&authSource=admin&w=majority&retryWrites=true&w=majority";
+var mongoURL="";
 
 if (!mongoURL) {
   throw new Error(
